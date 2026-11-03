@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <AssemblyName>EmployeeManagement.Api</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Common\EmployeeManagement.Common.Application\EmployeeManagement.Common.Application.csproj" />
+    <ProjectReference Include="..\Modules\Common\EmployeeManagement.Common.Infrastructure\EmployeeManagement.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\EmployeeManagement.ServiceDefaults\EmployeeManagement.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>

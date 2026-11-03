@@ -49,5 +49,33 @@
 
 ## リポジトリの現状
 
-現時点ではアプリ本体とビルド・テスト手順が存在しない。実装基盤が追加された際に、
-実際に確認した構成とコマンドでこの節を更新する。
+.NET 10 の初期構成がある。SDK は`global.json`で10.0.403以降の.NET 10 feature bandに限定する。ソリューション形式は`.slnx`。
+
+- `src/EmployeeManagement.Api`: ASP.NET Core Web API。`/health`の準備状態と`/api/health`のJSON応答を公開し、CommonのApplicationとInfrastructureを参照する。
+- `src/EmployeeManagement.Web`: APIとは別ホストのBlazor Web App。Aspireのサービス検出でAPIに接続し、初期画面からヘルス状態を取得する。
+- `src/Modules/Common`: CommonモジュールのDomain、Application、Infrastructure各プロジェクト。業務機能やDBスキーマはまだない。
+- `tests/EmployeeManagement.Common.Tests`: プロジェクト参照とパッケージ参照の許可リストを検査するテスト。
+- `tests/EmployeeManagement.IntegrationTests`: `WebApplicationFactory`によるAPIヘルスエンドポイントの結合テスト。
+- `EmployeeManagement.AppHost`: PostgreSQL、pgAdmin、API、Blazor Webのローカル開発オーケストレーション。
+- `EmployeeManagement.ServiceDefaults`: API/Webのヘルスチェック、サービス検出、HTTP回復性、OpenTelemetry既定値。
+- `.agents/skills/aspire*`および`.github/skills/aspire*`: Aspire CLIで追加したAspire開発用エージェントスキル。
+- `.editorconfig`、`Directory.Build.props`、`Directory.Packages.props`: 書式、解析、警告、ターゲットフレームワーク、NuGetバージョンを共通管理する。
+
+リポジトリルートで次を実行する。これらのコマンドは.NET SDK 10.0.403で確認済み。
+
+```powershell
+dotnet build EmployeeManagement.slnx
+dotnet test EmployeeManagement.slnx
+aspire run --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj
+```
+
+Aspire AppHostはAPIとWebを別ホストとして起動し、Web→API参照、PostgreSQL→API接続、pgAdminを管理する。PostgreSQLとpgAdminコンテナー初期化用の資格情報はAspire管理の開発用シークレットとし、ソースに記録しない。pgAdminはログイン画面を出さないDesktop modeで起動し、ホスト側ではループバックインターフェースにのみ公開する。`aspire run --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj`で起動し、ダッシュボードから各リソースへアクセスする。PostgreSQLデータはAspire管理の名前付きボリュームへ永続化する。旧Composeのコンテナは停止し、旧データボリュームは削除せず保持する。Aspire CLI 13.4.6を使い、`aspire init --non-interactive --language csharp`、`aspire add postgresql --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj --non-interactive`、`aspire agent init --workspace-root . --skill-locations github --skills aspire,aspire-init,aspire-orchestration,aspire-monitoring,aspire-deployment,aspireify --non-interactive`を実行している。APIへのNpgsql接続、DBスキーマ、およびDBを使う結合テストはまだ追加していない。
+
+起動後、別のターミナルで以下を実行して各リソースの準備状態を確認する。pgAdminのURLはAspireダッシュボードから開き、`/misc/ping`が`PING`を返すことを確認する。APIは`/api/health`がJSONで`Healthy`を返し、BlazorのトップページにAPI状態が表示される。
+
+```powershell
+aspire wait postgres --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj
+aspire wait pgadmin --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj
+aspire wait api --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj
+aspire wait web --apphost EmployeeManagement.AppHost\EmployeeManagement.AppHost.csproj
+```
