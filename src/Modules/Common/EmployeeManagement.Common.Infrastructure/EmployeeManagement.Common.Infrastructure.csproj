@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeManagement.Common.Domain\EmployeeManagement.Common.Domain.csproj" />
+    <ProjectReference Include="..\EmployeeManagement.Common.Application\EmployeeManagement.Common.Application.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <AssemblyName>EmployeeManagement.Common.Infrastructure</AssemblyName>
+  </PropertyGroup>
+
+</Project>

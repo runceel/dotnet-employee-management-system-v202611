@@ -1,0 +1,23 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/EmployeeManagement.Api/EmployeeManagement.Api.csproj" />
+    <Project Path="src/EmployeeManagement.Web/EmployeeManagement.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Common/">
+    <Project Path="src/Modules/Common/EmployeeManagement.Common.Application/EmployeeManagement.Common.Application.csproj" />
+    <Project Path="src/Modules/Common/EmployeeManagement.Common.Domain/EmployeeManagement.Common.Domain.csproj" />
+    <Project Path="src/Modules/Common/EmployeeManagement.Common.Infrastructure/EmployeeManagement.Common.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EmployeeManagement.Common.Tests/EmployeeManagement.Common.Tests.csproj" />
+    <Project Path="tests/EmployeeManagement.IntegrationTests/EmployeeManagement.IntegrationTests.csproj" />
+  </Folder>
+  <Project Path="EmployeeManagement.AppHost/EmployeeManagement.AppHost.csproj" />
+  <Project Path="EmployeeManagement.ServiceDefaults/EmployeeManagement.ServiceDefaults.csproj" />
+</Solution>

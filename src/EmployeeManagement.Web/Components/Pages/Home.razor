@@ -1,0 +1,28 @@
+﻿@page "/"
+@using EmployeeManagement.Web.Services
+@inject BackendApiClient BackendApi
+@inject ILogger<Home> Logger
+
+<PageTitle>Home</PageTitle>
+
+<h1>Employee Management</h1>
+
+<p>Backend API status: @_status</p>
+
+@code {
+    private string _status = "Checking...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var health = await BackendApi.GetHealthAsync();
+            _status = health?.Status ?? "No status returned";
+        }
+        catch (HttpRequestException exception)
+        {
+            Logger.LogWarning(exception, "Could not reach the backend API.");
+            _status = "Unavailable";
+        }
+    }
+}

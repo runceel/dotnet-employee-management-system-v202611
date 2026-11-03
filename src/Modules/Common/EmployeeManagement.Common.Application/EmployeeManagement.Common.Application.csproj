@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeManagement.Common.Domain\EmployeeManagement.Common.Domain.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <AssemblyName>EmployeeManagement.Common.Application</AssemblyName>
+  </PropertyGroup>
+
+</Project>
